@@ -16,6 +16,7 @@ namespace backENDCliente.Controllers
             _context = context;
         }
 
+        // Obtiene todos los contactos de un cliente específico.
         [HttpGet("{id}/contactos")]
         public async Task<IActionResult> GetContactosCliente(int id)
         {
@@ -36,6 +37,7 @@ namespace backENDCliente.Controllers
             }
         }
 
+        // Crea un nuevo contacto para un cliente específico.
         [HttpPost("{id}/contactos")]
         public async Task<IActionResult> PostContactoCliente(int id, Contacto contacto)
         {
@@ -58,6 +60,7 @@ namespace backENDCliente.Controllers
             }
         }
 
+        // Elimina un contacto de un cliente específico.
         [HttpDelete("{clienteId}/contactos/{contactoId}")]
         public async Task<IActionResult> DeleteContacto(int clienteId, int contactoId)
         {
@@ -79,10 +82,11 @@ namespace backENDCliente.Controllers
             }
         }
 
-
+        // Actualiza un contacto existente de un cliente específico.
         [HttpPut("{clienteId}/contactos/{contactoId}")]
         public async Task<IActionResult> PutContacto(int clienteId, int contactoId, Contacto contacto)
         {
+            // Verifica si los IDs de cliente y contacto coinciden con el cuerpo de la solicitud
             if (clienteId != contacto.idCliente || contactoId != contacto.IdContacto)
             {
                 return BadRequest("Los IDs de cliente y contacto no coinciden con el cuerpo de la solicitud.");
@@ -90,12 +94,14 @@ namespace backENDCliente.Controllers
 
             try
             {
+                // Actualiza el contacto en la base de datos
                 _context.Entry(contacto).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
             catch (DbUpdateConcurrencyException)
             {
+                // Verifica si el contacto existe
                 if (!ContactoExists(contactoId))
                 {
                     return NotFound();
@@ -111,6 +117,7 @@ namespace backENDCliente.Controllers
             }
         }
 
+        // Verifica si un contacto existe en la base de datos.
         private bool ContactoExists(int contactoId)
         {
             return _context.Contacto.Any(c => c.IdContacto == contactoId);

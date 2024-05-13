@@ -11,11 +11,13 @@ namespace backENDCliente.Controllers
     {
         private readonly AplicationDbContext _context;
 
+        //Inicializa el controlador con el contexto de la base de datos
         public ClientesController(AplicationDbContext context)
         {
             _context = context;
         }
 
+        //Obtiene todos los clientes de la base de datos.
         [HttpGet("obtenerClientes")]
         public async Task<IActionResult> Get()
         {
@@ -31,6 +33,7 @@ namespace backENDCliente.Controllers
 
         }
 
+        //Guarda un nuevo cliente en la base de datos.
         [HttpPost("guardarClientes")]
         public async Task<IActionResult> Post(Cliente cliente)
         {
@@ -46,7 +49,7 @@ namespace backENDCliente.Controllers
             }
         }
 
-
+        //Edita un cliente existente en la base de datos, se debe ingresar el id del cliente.
         [HttpPut("editarCliente/{id}")]
         public async Task<IActionResult> Put(int id, Cliente cliente)
         {
@@ -84,6 +87,7 @@ namespace backENDCliente.Controllers
             }
         }
 
+        //Elimina un cliente de la base de datos, se debe ingresar el id del cliente.
         [HttpDelete("eliminarCliente/{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -18,6 +18,7 @@ namespace backENDCliente.Controllers
             _context = context;
         }
 
+        // Obtiene todos los métodos de pago asociados a un cliente específico.
         [HttpGet("{id}/getMetodosPagos")]
         public async Task<IActionResult> GetMetodosPago(int id)
         {
@@ -44,7 +45,7 @@ namespace backENDCliente.Controllers
             }
         }
 
-
+        // Crea un nuevo método de pago para un cliente específico.
         [HttpPost("{id}/MetodosPagos")]
         public async Task<IActionResult> PostMetodoPagoCliente(int id, MetodosPagos metodoPago)
         {
@@ -67,7 +68,7 @@ namespace backENDCliente.Controllers
             }
         }
 
-
+        // Actualiza un método de pago existente para un cliente específico.
         [HttpPut("{clienteId}/MetodosPagos/{metodoPagoId}")]
         public async Task<IActionResult> PutMetodoPago(int clienteId, int metodoPagoId, MetodosPagos metodoPago)
         {
@@ -99,11 +100,12 @@ namespace backENDCliente.Controllers
             }
         }
 
+        // Verifica si un método de pago existe en la base de datos.
         private bool MetodoPagoExists(int metodoPagoId)
         {
             return _context.MetodosPagos.Any(c => c.idMetodoPago == metodoPagoId);
         }
-
+        // Elimina un método de pago asociado a un cliente específico.
         [HttpDelete("{clienteId}/MetodosPagos/{metodoPagoId}")]
         public async Task<IActionResult> DeleteMetodoPago(int clienteId, int metodoPagoId)
         {
