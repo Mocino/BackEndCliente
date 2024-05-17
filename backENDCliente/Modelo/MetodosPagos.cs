@@ -13,5 +13,7 @@ namespace backENDCliente.Modelo
         public string numero { get; set; }
         public DateTime fechaVencimiento { get; set; }
         public string nombreTitular { get; set; }
+        public string Estatus { get; set; } = "A";
+
     }
 }

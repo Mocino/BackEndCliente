@@ -23,7 +23,7 @@ namespace backENDCliente.Controllers
         {
             try
             {
-                var listCliente = await _context.Cliente.ToListAsync();
+                var listCliente = await _context.Cliente.Where(c => c.Estatus == "A").ToListAsync();
                 return Ok(listCliente);
             }
             catch (Exception ex)
@@ -39,6 +39,14 @@ namespace backENDCliente.Controllers
         {
             try
             {
+                var existingCliente = await _context.Cliente
+                    .FirstOrDefaultAsync(c => c.DPI == cliente.DPI);
+
+                if (existingCliente != null)
+                {
+                    return BadRequest("DPI REPETIDO");
+                }
+
                 _context.Add(cliente);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("Get", new { id = cliente.idCliente }, cliente);
@@ -46,6 +54,29 @@ namespace backENDCliente.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        // Método para verificar si un DPI existe
+        [HttpGet("verificarDPI/{dpi}")]
+        public async Task<IActionResult> VerificarDPI(string dpi)
+        {
+            try
+            {
+                // Verificar si el DPI existe
+                var existingCliente = await _context.Cliente
+                    .FirstOrDefaultAsync(c => c.DPI == dpi);
+
+                if (existingCliente != null)
+                {
+                    return Ok(new { exists = true, message = "El DPI ya existe." });
+                }
+
+                return Ok(new { exists = false, message = "El DPI no existe." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
@@ -100,7 +131,8 @@ namespace backENDCliente.Controllers
                     return NotFound();
                 }
 
-                _context.Cliente.Remove(cliente);
+                cliente.Estatus = "I";
+                _context.Cliente.Update(cliente);
                 await _context.SaveChangesAsync();
 
                 return NoContent();

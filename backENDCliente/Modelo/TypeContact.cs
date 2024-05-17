@@ -10,6 +10,8 @@ namespace backENDCliente.Modelo
         public int idTipoContacto { get; set; }
         public string nombre { get; set; }
         public string valor { get; set; }
+        public string Estatus { get; set; } = "A";
+
     }
 }
 

@@ -28,7 +28,7 @@ namespace backENDCliente.Controllers
                     return NotFound();
                 }
 
-                var contactos = await _context.Contacto.Where(c => c.idCliente == id).ToListAsync();
+                var contactos = await _context.Contacto.Where(c => c.idCliente == id && c.Estatus == "A" ).ToListAsync();
                 return Ok(contactos);
             }
             catch (Exception ex)
@@ -72,7 +72,8 @@ namespace backENDCliente.Controllers
                     return NotFound();
                 }
 
-                _context.Contacto.Remove(contacto);
+                contacto.Estatus = "I";
+                _context.Contacto.Update(contacto);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -121,6 +122,30 @@ namespace backENDCliente.Controllers
         private bool ContactoExists(int contactoId)
         {
             return _context.Contacto.Any(c => c.IdContacto == contactoId);
+        }
+
+
+        // Método para verificar si un DPI existe
+        [HttpGet("verificarEmail/{email}/{idcliente}")]
+        public async Task<IActionResult> VerificarDPI(string email, int idcliente)
+        {
+            try
+            {
+                // Verificar si un email ya existe
+                var existingEmail = await _context.Contacto
+                    .FirstOrDefaultAsync(c => c.ValorContacto == email && c.idCliente == idcliente);
+
+                if (existingEmail != null)
+                {
+                    return Ok(new { exists = true, message = "El email ya existe." });
+                }
+
+                return Ok(new { exists = false, message = "El email no existe." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
     }

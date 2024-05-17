@@ -11,5 +11,7 @@ namespace backENDCliente.Modelo
         public int idCliente { get; set; }
         public string TipoContacto { get; set; }
         public string ValorContacto { get; set; }
+        public string Estatus { get; set; } = "A";
+
     }
 }

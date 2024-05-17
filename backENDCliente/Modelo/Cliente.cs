@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+
 namespace backENDCliente.Modelo
 {
     public class Cliente
@@ -14,5 +16,6 @@ namespace backENDCliente.Modelo
         public string DPI { get; set; }
         public string NIT { get; set; }
         public string Empresa { get; set; }
+        public string Estatus { get; set; } = "A";
     }
 }

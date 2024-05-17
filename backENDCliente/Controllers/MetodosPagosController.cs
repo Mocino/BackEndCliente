@@ -127,5 +127,29 @@ namespace backENDCliente.Controllers
             }
         }
         //soy un comentario
+
+        // Método para verificar si un DPI existe
+        [HttpGet("verificarNumero/{numero}/{idcliente}")]
+        public async Task<IActionResult> VerificarDPI(string numero, int idcliente)
+        {
+            try
+            {
+                // Verificar si un email ya existe
+                var existingNumero = await _context.MetodosPagos
+                    .FirstOrDefaultAsync(c => c.numero == numero && c.idCliente == idcliente);
+
+                if (existingNumero != null)
+                {
+                    return Ok(new { exists = true, message = "El numero ya existe." });
+                }
+
+                return Ok(new { exists = false, message = "El numero no existe." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }
