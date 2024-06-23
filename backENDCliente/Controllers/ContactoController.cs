@@ -148,5 +148,28 @@ namespace backENDCliente.Controllers
             }
         }
 
+
+        [HttpGet("verificarEmail/{email}")]
+        public async Task<IActionResult> VerificarEmail(string email)
+        {
+            try
+            {
+                // Verificar si un email ya existe en la base de datos
+                var existingEmail = await _context.Contacto
+                    .FirstOrDefaultAsync(c => c.ValorContacto == email);
+
+                if (existingEmail != null)
+                {
+                    return Ok(new { exists = true, message = "El email ya existe." });
+                }
+
+                return Ok(new { exists = false, message = "El email no existe." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }
